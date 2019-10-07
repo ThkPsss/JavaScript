@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Hangman Game</title>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4">Hangman Game</h1>
+            <p class="lead">Guess the anime</p>
+        </div>
+
+
+        <!-- <div class="col-lg-12">hi</div> -->
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Word to Guess</h3>
+            </div>
+            <div class="panel-body">
+                <h2 id="wordToGuess">_ _ _ _ _ _ </h2>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                Wrong Guessed: <span id="wrongGuesses"></span>
+            </div>
+        </div>
+        <div class="panel panel-default">
+                <div class="panel-body">
+                Guesses Left: <span id="numGuesses"></span>
+                </div>
+        </div>
+        <div class="panel panel-default">
+                <div class="panel-body">
+                Win Counter: <span id="winCounter"></span>
+                </div>
+        </div>
+        <div class="panel panel-default">
+                <div class="panel-body">
+                Loss Counter: <span id="lossCounter"></span>
+                </div>
+        </div>
+
+
+
+    </div>
+
+    <script>
+        // Globals
+
+var wordOptions = ["naruto", "one piece", "bleach", "one punch man", "demon slayer", "food wars"]
+var selectedWord = "";
+var lettersinWord = [];
+var numBlacks = 0;
+var blanksAndSuccesses = [];
+var wrongLetters = [];
+
+var winCount = 0;
+var lossCount = 0;
+var guessesLeft = 9;
+
+//Functions
+
+function startGame() {
+    selectedWord = wordOptions[Math.floor(Math.random() * wordOptions.length)];
+    lettersinWord = selectedWord.split("");
+    numBlacks = lettersinWord.length;
+
+    //reset
+    guessesLeft = 9;
+    wrongLetters = [];
+    blanksAndSuccesses = [];
+
+    for(i = 0; i<numBlacks; i++){
+        blanksAndSuccesses.push("_");
+    }
+
+    document.getElementById("wordToGuess").innerHTML = blanksAndSuccesses.join(" ");
+    document.getElementById("numGuesses").innerHTML = guessesLeft;
+    document.getElementById("winCounter").innerHTML = winCount;
+    document.getElementById("lossCounter").innerHTML = lossCount;
+
+    //debug
+    console.log(selectedWord);
+    console.log(lettersinWord);
+}
+
+function checkLetter(letter) {
+    var isLetterInWord = false;
+
+    for(var i=0; i<numBlacks; i++) {
+        if(selectedWord[i] == letter) {
+            isLetterInWord = true;
+        }
+    }
+    if(isLetterInWord) {
+        for (i = 0; i<numBlacks; i++){
+            if(selectedWord[i] == letter) {
+            blanksAndSuccesses[i] = letter;
+            }
+        }
+    }
+
+    else {
+        wrongLetters.push(letter);
+        guessesLeft--
+    }
+
+    function roundComplete(){
+        console.log("Win count: "+ winCount + "| Loss Count: "+ lossCount +"| Guesses Left: " +guessesLeft)
+
+        document.getElementById("numGuesses").innerHTML = guessesLeft;
+        document.getElementById("wordToGuess").innerHTML = blanksAndSuccesses.join(" ");
+        document.getElementById("wrongGuesses").innerHTML = wrongLetters.join(" ")
+
+        if (lettersinWord.toString() ==  blanksAndSuccesses.toString()) {
+            winCount++;
+            alert("You Won!");
+
+            document.getElementById("winCounter").innerHTML = winCount;
+
+            startGame();
+        }
+
+        else if(guessesLeft == 0 ) {
+            lossCount++;
+            alert("You lost");
+
+            document.getElementById("lossCounter").innerHTML = lossCount;
+
+            startGame();
+        }
+
+    }
+
+}
+
+startGame();
+//Main Process
+
+document.onkeyup = function(event) {
+    var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
+    checkLetter(letterGuessed);
+    roundComplete();
+}
+
+    </script>
+
+</body>
+</html>

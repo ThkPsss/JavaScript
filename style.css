@@ -1,0 +1,22 @@
+*{
+    box-sizing: border-box;
+}
+
+.panel{
+    padding-top: 10px;
+}
+.panel-title{
+    background: lightgray;
+    border: 1px solid #ddd;
+    max-width: 650px;
+    width: 100%;
+}
+.panel-body {
+    background: #fff;
+    padding: 20px;
+    margin: 0 0 20px 0;
+    width: 100%;
+    max-width: 650px;
+    float: left;
+    border: 1px solid #ddd;
+}
